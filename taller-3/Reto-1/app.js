@@ -1,28 +1,66 @@
-const users = [];
 
-let fullName = prompt("Ingresa tu nombre y apellido: ");
-// console.log(fullName.toLowerCase());
-// console.log(fullName.split(" ")[0]);
-const name = fullName.split(" ")[0];
-const lastName = fullName.split(" ")[1];
-// console.log(fullName.split(" ")[1]);
-// console.log(name.slice(0, 3));
-// console.log(lastName.slice(0, 3));
+while (true) {
 
-const userName = name.slice(0, 3);
-const userLastName = lastName.slice(0, 3);
-const fullUserName = userName + userLastName;
-console.log(fullUserName.toLowerCase());
-const dominio = fullUserName.toLowerCase();
-const emailDominio = fullUserName.toLowerCase() + "@myDomain.com";
-const bothInfo = dominio + ":" + " " + emailDominio;
-console.log(bothInfo);
+  const users = [];
 
-const usersInfo = {
-  username: dominio,
-  email: emailDominio,
-  usuarios: bothInfo,
-};
+  const fullName = prompt("Ingresa tu nombre y apellido: ").trim();
+  const name = fullName.split(" ")[0];
+  const lastName = fullName.split(" ")[1];
 
-users.push(usersInfo);
-console.log(users);
+  const userName = name.slice(0, 3);
+  const userLastName = lastName.slice(0, 3);
+  const fullUserName = userName + userLastName;
+  const dominio = fullUserName.toLowerCase();
+  const emailDominio = fullUserName.toLowerCase() + "@myDomain.com";
+  const bothInfo = `${dominio}: ${emailDominio}`;
+
+  const usersInfo = {
+    username: dominio,
+    email: emailDominio,
+    usuarios: bothInfo,
+  };
+
+  users.push(usersInfo);
+
+
+  let usernameIndex = -1;
+  for (let i = 0; i < users.length; i++) {
+    if (users[i].username === dominio) {
+      usernameIndex = i;
+      break;
+    }
+  }
+
+  if (usernameIndex !== -1) {
+    let index = 1;
+    let newDominio = "";
+    let newEmailDominio = "";
+    let newBothInfo = "";
+
+    while (true) {
+      newDominio = fullUserName.toLowerCase() + index;
+      newEmailDominio = newDominio + "@myDomain.com";
+      newBothInfo = newDominio + ": " + newEmailDominio;
+
+      let exists = false;
+      for (let j = 0; j < users.length; j++) {
+        if (users[j].username === newDominio) {
+          exists = true;
+          break;
+        }
+      }
+
+      if (!exists) {
+        let newUser = {
+          username: newDominio,
+          email: newEmailDominio,
+          usuarios: newBothInfo,
+        };
+        users.push(newUser);
+        console.log(newUser)
+        break;
+      }
+      index++;
+    }
+  }
+}
