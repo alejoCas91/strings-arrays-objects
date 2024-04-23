@@ -1,54 +1,120 @@
-let i = true
-const eventList = []
-let id = 0;
-while (i) {
-    const userInput = prompt(`Por favor ingresa una de las siguientes opciones: 
-                            \n 1. Crear un evento 
-                            \n 2. Ver eventos
-                            \n 3. Buscar eventos por nombre
-                            \n 4. Actualizar evento
-                            \n 5. Eliminar evento
-                            \n 6. Salir`);
-    switch (userInput) {
-        case "1":
-            createEvent();
-        case "2":
-            seeEvents();
-        case "3":
-            searchEvent();
-        case "4":
-            updateEvent();
-        case "5":
-            deleteEvent();
-        case "6":
-            i = false;
+let eventos = [];
+
+while (true) {
+    const opcion = prompt(`Seleccione una opción:
+    1. Crear evento
+    2. Visualizar eventos
+    3. Buscar evento
+    4. Actualizar evento
+    5. Eliminar evento
+    6. Salir`);
+
+    switch (opcion) {
+        case '1':
+            crearEvento();
+            break;
+        case '2':
+            visualizarEventos();
+            break;
+        case '3':
+            buscarEvento();
+            break;
+        case '4':
+            actualizarEvento();
+            break;
+        case '5':
+            eliminarEvento();
+            break;
+        case '6':
+            alert("¡Hasta luego!");
             break;
         default:
-            alert("Ingresa un dato valido")
+            alert("Opción inválida, por favor seleccione una opción válida.");
             break;
+    }
+
+    if (opcion === '6') {
+        break;
     }
 }
 
-function createEvent (){
-    const eventName = prompt("Por favor ingresa el nombre del evento: ");
-    const eventDate = prompt("Por favor ingresa la fecha del evento (YYYY-MM-DD): ");
-    const eventDescription = prompt("Por favor ingresa la descripcion del evento: ");
-    const event = new Object();
-    event.eventName = eventName;
-    event.eventDate = eventDate;
-    event.eventDescription = eventDescription;
-    eventList.push(event);
+
+function crearEvento() {
+    const titulo = prompt("Ingrese el título del evento:");
+    const fecha = prompt("Ingrese la fecha del evento:");
+    const descripcion = prompt("Ingrese la descripción del evento:");
+
+    const evento = {
+        titulo: titulo.trim(),
+        fecha: fecha.trim(),
+        descripcion: descripcion.trim()
+    };
+
+    eventos.push(evento);
+    alert("Evento creado con éxito!");
 }
 
-function seeEvents (){
-    console.log(eventList);
+function visualizarEventos() {
+    const eventosList = Object.values(eventos);
+    let eventosString = "";
+
+    for (let i = 0; i < eventosList.length; i++) {
+        eventosString += `Evento ${i + 1}: ${eventosList[i].titulo} - ${eventosList[i].fecha} - ${eventosList[i].descripcion}\n`;
+    }
+
+    alert(eventosString);
 }
 
-function searchEvent (){
+function buscarEvento() {
+    const buscar = prompt("Ingrese el título del evento a buscar:");
+    const eventosList = Object.values(eventos);
+    let encontrado = false;
+
+    for (let i = 0; i < eventosList.length; i++) {
+        if (eventosList[i].titulo.toLowerCase().includes(buscar.toLowerCase())) {
+            alert(`Evento encontrado: ${eventosList[i].titulo} - ${eventosList[i].fecha} - ${eventosList[i].descripcion}`);
+            encontrado = true;
+            break;
+        }
+    }
+
+    if (!encontrado) {
+        alert("Evento no encontrado");
+    }
 }
 
-function updateEvent (){
+function actualizarEvento() {
+    const idEvento = prompt("Ingrese el identificador del evento a actualizar:");
+    const evento = eventos[idEvento - 1];
+
+    if (evento) {
+        const titulo = prompt("Ingrese el nuevo título del evento:");
+        const fecha = prompt("Ingrese la nueva fecha del evento:");
+        const descripcion = prompt("Ingrese la nueva descripción del evento:");
+
+        Object.assign(evento, {
+            titulo: titulo.trim(),
+            fecha: fecha.trim(),
+            descripcion: descripcion.trim()
+        });
+
+        alert("Evento actualizado con éxito!");
+    } else {
+        alert("Evento no encontrado");
+    }
 }
 
-function deleteEvent(){
+function eliminarEvento() {
+    const idEvento = prompt("Ingrese el identificador del evento a eliminar:");
+    const eventosList = Object.values(eventos);
+
+    for (let i = 0; i < eventosList.length; i++) {
+        if (i + 1 === idEvento) {
+            eventos = eventos.filter((evento, index) => index !== i);
+            alert("Evento eliminado con éxito!");
+            return;
+        }
+    }
+
+    alert("Evento no encontrado");
 }
